@@ -4,11 +4,8 @@
 name: Node.js Package
 
 on:
-  push:
-    branches:
-      - main
-  # release:
-  #   types: [created]
+  release:
+    types: [created]
 
 jobs:
   build:
@@ -27,6 +24,6 @@ jobs:
           echo "Pnpm version: $(pnpm --version)"
           echo "Git version: $(git --version)"
       - run: pnpm install --frozen-lockfile
-      - run: pnpm publish --dry-run
+      - run: pnpm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,6 +1,6 @@
 {
   "name": "@piksail/strapi-provider-email-plunk",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Plunk provider for strapi email",
   "keywords": [
     "email",
