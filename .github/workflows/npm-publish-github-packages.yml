@@ -4,18 +4,29 @@
 name: Node.js Package
 
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      - main
+  # release:
+  #   types: [created]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
+      - name: Enable corepack
+        run: npm install -g corepack@latest &&  npm i -g --force corepack && corepack enable
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "22.x"
-      - run: pnpm ci
-      - run: pnpm publish
+          node-version-file: package.json
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Dump versions
+        run: |
+          echo "Node version: $(node -v)"
+          echo "Pnpm version: $(pnpm --version)"
+          echo "Git version: $(git --version)"
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm publish --dry-run
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
