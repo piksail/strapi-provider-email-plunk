@@ -23,10 +23,6 @@ jobs:
           echo "Node version: $(node -v)"
           echo "Pnpm version: $(pnpm --version)"
           echo "Git version: $(git --version)"
-      - name: Version
-        env:
-          TAG_NAME: ${{ github.event.release.tag_name }}
-        run: pnpm version ${TAG_NAME} --no-git-tag-version
       - run: pnpm install --frozen-lockfile
       - name: Publish
         env:
