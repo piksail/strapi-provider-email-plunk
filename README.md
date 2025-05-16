@@ -1,4 +1,4 @@
-# strapi-provider-email-plunk
+# @piksail/strapi-provider-email-plunk
 
 ## Installation
 
@@ -32,7 +32,7 @@ module.exports = ({ env }) => ({
   // ...
   email: {
     config: {
-      provider: "plunk",
+      provider: "@piksail/strapi-provider-email-plunk",
       providerOptions: {
         apiKey: env("PLUNK_API_KEY"),
         baseUrl: env("PLUNK_BASE_URL"), // Optional, use if self-hosting
