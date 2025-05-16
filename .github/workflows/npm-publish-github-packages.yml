@@ -6,16 +6,29 @@ name: Node.js Package
 on:
   release:
     types: [created]
-    
+
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
-      - run: npm ci 
-      - run: npm publish
+          node-version-file: package.json
+          cache-dependency-path: package-lock.json
+          registry-url: "https://registry.npmjs.org/"
+      - name: Dump versions
+        run: |
+          echo "Node version: $(node -v)"
+          echo "npm version: $(npm --version)"
+          echo "Git version: $(git --version)"
+      - run: npm install --frozen-lockfile
+      - name: Set version
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: npm version ${TAG_NAME} --no-git-tag-version
+      - name: Publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm publish --access=public
