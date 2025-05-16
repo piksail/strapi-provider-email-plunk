@@ -11,23 +11,23 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     steps:
-      - name: Enable corepack
-        run: npm install -g corepack@latest &&  npm i -g --force corepack && corepack enable
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: package.json
-          cache-dependency-path: pnpm-lock.yaml
+          cache-dependency-path: npm-lock.yaml
       - name: Dump versions
         run: |
           echo "Node version: $(node -v)"
-          echo "Pnpm version: $(pnpm --version)"
+          echo "npm version: $(npm --version)"
           echo "Git version: $(git --version)"
-      - run: pnpm install --frozen-lockfile
+      - run: npm install --frozen-lockfile
+      - name: Set version
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: npm version ${TAG_NAME} --no-git-tag-version
       - name: Publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc # pnpm shenanigans
-          echo "@piksail:registry=https://registry.npmjs.org/" >> ~/.npmrc # More pnpm shenanigans
-          pnpm publish --no-git-checks --access public # Even more pnpm shenanigans
+          npm publish
