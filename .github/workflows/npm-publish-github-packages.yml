@@ -23,7 +23,15 @@ jobs:
           echo "Node version: $(node -v)"
           echo "Pnpm version: $(pnpm --version)"
           echo "Git version: $(git --version)"
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm publish --no-git-checks # pnpm shenanigans
+      - name: Version
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: pnpm version ${TAG_NAME} --no-git-tag-version
+      - run: pnpm install --frozen-lockfile
+      - name: Publish
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc # pnpm shenanigans
+          echo "@piksail:registry=https://registry.npmjs.org/" >> ~/.npmrc # More pnpm shenanigans
+          pnpm publish --no-git-checks --access public # Even more pnpm shenanigans
