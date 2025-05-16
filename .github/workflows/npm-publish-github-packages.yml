@@ -24,6 +24,6 @@ jobs:
           echo "Pnpm version: $(pnpm --version)"
           echo "Git version: $(git --version)"
       - run: pnpm install --frozen-lockfile
-      - run: pnpm publish
+      - run: pnpm publish --no-git-checks # pnpm shenanigans
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
