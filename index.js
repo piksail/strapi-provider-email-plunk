@@ -41,15 +41,16 @@ module.exports = {
         }
 
         const response = await plunk.emails.send(msg);
+        
         if (!response.success) {
           throw new Error(`Plunk send failed: ${JSON.stringify(response)}`);
-        } else {
-          const responseBody = await response.json();
-          if (settings.verbose) {
-            console.log("Plunk Response:", responseBody);
-          }
-          return responseBody;
         }
+
+        if (settings.verbose) {
+          console.log("Plunk Response:", responseBody);
+        }
+  
+        return responseBody;
       },
     };
   },
