@@ -28,7 +28,7 @@ module.exports = {
           from: from || settings.defaultFrom,
           to,
           subject: subject || "",
-          type: "text/html",
+          type: "html",
           body: html || text,
           ...rest,
           // replyTo: from || settings.defaultReplyTo, //  Not implemented in @plunk/node https://github.com/useplunk/node/pull/9
