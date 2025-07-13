@@ -47,10 +47,10 @@ module.exports = {
         }
 
         if (settings.verbose) {
-          console.log("Plunk Response:", responseBody);
+          console.log("Plunk Response:", response);
         }
   
-        return responseBody;
+        return response;
       },
     };
   },
